@@ -4,14 +4,17 @@ Author: Wrappixel
 Email: niravjoshi87@gmail.com
 File: js
 */
-$(function() {
-    "use strict";
+
+const customInitFunctions = () => {
+
     $(function() {
-        $(".preloader").fadeOut();
-    });
-    jQuery(document).on('click', '.mega-dropdown', function(e) {
-        e.stopPropagation()
-    });
+        "use strict";
+        $(function() {
+            $(".preloader").fadeOut();
+        });
+        jQuery(document).on('click', '.mega-dropdown', function(e) {
+            e.stopPropagation()
+        });
     // ============================================================== 
     // This is for the top header part and sidebar part
     // ==============================================================  
@@ -155,3 +158,8 @@ $(function() {
     });
 
 });
+}
+
+customInitFunctions();
+
+
