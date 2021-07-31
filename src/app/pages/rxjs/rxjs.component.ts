@@ -10,20 +10,11 @@ import { retry, take, map, filter } from 'rxjs/operators';
 })
 export class RxjsComponent implements OnDestroy{
 
-  public intervalSubs: Subscription;
+  public intervalSubs: Subscription;              // Nos subscribimos a un observable llamado intervalSubs
 
   constructor() {
-    
-  // this.retornaObservable().pipe(                // Pipe transforma el flujo de información del observable
-  //   retry(1)                                    // retry continuará el flujo de emisión del observable donde i no se reinicio 
-  // ).
-  // subscribe(                                    // Para poder ver que emite el observable hay que subscribirse a el
-  //   valor => console.log('Subs', valor),
-  //   error => console.warn('Error:', error),
-  //   () => console.info('Obs terminado')
-  // );
-
-    this.intervalSubs = this.retornaIntervalo()
+  
+    this.intervalSubs = this.retornaIntervalo()    // intervalSubs devuelve un observable en función de retornaIntervalo
                           .subscribe(
                             (valor) => console.log(valor)
                           )
@@ -33,9 +24,9 @@ export class RxjsComponent implements OnDestroy{
     this.intervalSubs.unsubscribe();               // Cuando salgamos del componente este se destruirá. 
   }
 
-  retornaIntervalo(): Observable<number>{
+  retornaIntervalo(): Observable<number>{                     // retornaIntervalo 
 
-    return interval( 500 )                                    // Devuelve un observable cara 1/2 segundo
+    return interval( 500 )                                    // devuelve un observable cara 1/2 segundo
       .pipe(                                                  // Pipe transforma el flujo de información del observable
         map( valor => valor+1 ),                              // map transforma el valor de cada observable según una función                   
         filter( valor => ( valor % 2 === 0 ) ? true: false),  // Se mostrarán los valores cuya division entre 2 de como rdo 0, osea pares.
