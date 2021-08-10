@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 
 import { SharedModule } from '../shared/shared.module';
@@ -15,6 +15,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 //import { AppRoutingModule } from '../app-routing.module';
 
@@ -29,10 +30,12 @@ import { RxjsComponent } from './rxjs/rxjs.component';
     AccountSettingsComponent,
     PromesasComponent,
     RxjsComponent,
+    PerfilComponent,
   ],
   imports: [
     CommonModule,
-    FormsModule, 
+    FormsModule,
+    ReactiveFormsModule, 
     SharedModule,
     //AppRoutingModule --> también funciona
     RouterModule,

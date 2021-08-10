@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -9,7 +10,11 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 })
 export class HeaderComponent  {
 
-  constructor( private usuarioService: UsuarioService) { }
+  public usuario:Usuario;
+
+  constructor( private usuarioService: UsuarioService) {  // Inyectamos el usuarioService para obtener la información del usuario conectado
+    this.usuario = usuarioService.usuario;                // Obtenemos el perfil instanciado de usuario logueado con usuarioService
+   }
 
   logout(){
     this.usuarioService.logout();

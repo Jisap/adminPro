@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   login() {                                                // Función que recoge el contenido del formulario de login y nos loguea en el backend
     
     this.usuarioService.login( this.loginForm.value )      // Usamos el usuarioService.login para hacer la petición de login al backend 
-      .subscribe( resp => {                                // La respuesta viene como un observable al cual nos subscribimos para porder leerla
+      .subscribe( resp => {                                // La respuesta viene como un observable al cual nos subscribimos para porder leerlo
         console.log(resp)
         if( this.loginForm.get('remember').value){                           // Si el check de remember existe   
           localStorage.setItem('email', this.loginForm.get('email').value)   // guardamos en el localStorage el email 
