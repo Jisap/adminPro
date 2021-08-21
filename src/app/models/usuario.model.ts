@@ -16,14 +16,14 @@ export class Usuario {
 
     get imagenUrl(){ // del usuario
 
-        if (this.img.includes('https')) {
-            return this.img;
-        }
-
-        if( this.img ){
-            return `${ base_url }/upload/usuarios/${ this.img }`
-        }else{
+        if( !this.img ){
             return `${ base_url }/upload/usuarios/NoImage`
+        } else if (this.img.includes('https')) {
+            return this.img;
+        } else if (this.img) {
+            return `${base_url}/upload/usuarios/${this.img}`
+        } else {
+            return `${base_url}/upload/usuarios/NoImage`
         }
     }
 }

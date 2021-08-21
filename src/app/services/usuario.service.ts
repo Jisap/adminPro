@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
-import { catchError, map, tap } from 'rxjs/operators';//Se utiliza para realizar efectos secundarios para las notificaciones de la fuente observable.
+import { catchError, delay, map, tap } from 'rxjs/operators';//Se utiliza para realizar efectos secundarios para las notificaciones de la fuente observable.
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
 import { Usuario } from '../models/usuario.model';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
 
 
 
@@ -40,6 +41,14 @@ export class UsuarioService {
 
    get uid(): string{
      return this.usuario.uid || '';
+   }
+
+   get headers(){
+      return {
+        headers:{
+          'x-token': this.token
+        }
+      }
    }
 
   googleInit(){
@@ -144,6 +153,41 @@ export class UsuarioService {
         })
       )
   }
+
+
+  cargarUsuarios( desde: number = 0){
+    
+    const url = `${ base_url }/usuarios?desde=${ desde }`       //http://localhost:3005/api/usuarios?desde=5
+    
+    return this.http.get<CargarUsuario>( url, this.headers )   // Esta función nos devuelve todos los usuarios registrados y el total de estos
+              .pipe(                                           // Esta respuesta es un [] de objetos pero no es una instancia de Usuario que podamos manjear en el html 
+               delay(1000),  
+                map( resp => {                                 // Transformamos con pipe y map 
+                  const usuarios = resp.usuarios.map(          // Crearemos una instancia de Usuario por cada elemento del []
+                    user => new Usuario( user.nombre, 
+                                         user.email,
+                                         '',
+                                         user.img,
+                                         user.google,
+                                         user.role,
+                                         user.uid
+                    )
+                  )
+                  return {
+                    total: resp.total,
+                    usuarios            // Este array es ahora de instancias de Usuario
+                  };
+                })
+              )
+  }
+
+  eliminarUsuario( usuario:Usuario ){                                // Recibe un usuario a borrar
+    console.log('eliminando')
+    const url = `${base_url}/usuarios/${ usuario.uid }`              // Ruta de borrado en el backend
+    return this.http.delete<CargarUsuario>( url, this.headers )      // Petición de borrado al backend 
+  }
+
+  guardarUsuario( usuario: Usuario ){                                                         // Al cambiar el role en el html disparamos esta función
+    return this.http.put( `${ base_url }/usuarios/${ usuario.uid}`,usuario, this.headers )    // hacemos la petición con el usuario gnerado en el html
+  }                                                                                           // y mandamos el cambio con ese usuario modificado
 }
-
-

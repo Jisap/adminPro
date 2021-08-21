@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
       })
   }
 
-  renderButton() {                                // Renderización del boton de google
+  renderButton() {                                // Renderización del boton de google en el div con id='my-signin2'
     gapi.signin2.render('my-signin2', {
       'scope': 'profile email',
       'width': 240,
