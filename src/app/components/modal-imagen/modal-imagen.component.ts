@@ -26,10 +26,10 @@ export class ModalImagenComponent implements OnInit {
     this.modalImagenService.cerrarModal(); // Pone _ocultarModal en true
   }
 
-  cambiarImagen(file: File) {  // Recibe el archivo seleccionado desde el html
+  cambiarImagen(file: File) {  // Recibe el archivo seleccionado desde el html y lo muestra 
     this.imagenSubir = file;   // La prop imagenSubir toma ese valor. 
 
-    if (!file) {                                       // Si no hay imagen
+    if (!file) {                                        // Si no hay imagen
       return this.imgTemp = null;                       // imgTemp será null -> ngIf
     };                                                  // Pero si si hay imagen a subir procederemos a leerla
 
@@ -45,6 +45,7 @@ export class ModalImagenComponent implements OnInit {
     const id = this.modalImagenService.id;                                 // Si subimos la imagen es que previamente abrimos el modal (abrirModal())
     const tipo = this.modalImagenService.tipo;                             // y se cargaron la id y el tipo con el modalImagenService 
 
+    console.log(id, tipo)
     
     this.fileUploadService                                                 // hacemos la petición con el servicio 
       .actualizarFoto(this.imagenSubir, tipo, id)                          // que usa su método y le pasamos lo que necesita: archivo, tipo y el id

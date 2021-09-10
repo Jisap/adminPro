@@ -50,7 +50,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.usuarios = usuarios;                   // en la var usuarios le asignamos el valor dado por el backend
         this.usuariosTemp=usuarios;
         this.cargando = false;
-        this.longitudBusqueda = 0;
+        //this.longitudBusqueda = 0;
       })
   }
 
@@ -66,26 +66,23 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.cargarUsuarios();                          // Establecido el "desde" cargamos los usuarios que vamos a visualizar
   }
 
-  public longitudBusqueda:number ;
+  buscar( termino:string ){                                               // esta función recibe el valor del strings del input
 
-  buscar( termino:any ){                                               // El evento que recibe esta función son los strings del input
-
-    this.longitudBusqueda = (termino.target.value).length;             // Identificamos la longitud del string generado por el evento click
-
-    if(((termino.target.value).length) === 0 ){                        // Si la caja de busqueda esta vacia
-      return this.usuarios = this.usuariosTemp;                        // devolvemos los últimos usuarios cargados
+    if (termino.length === 0) {                                           // Si la caja de busqueda esta vacia
+      return this.usuarios = this.usuariosTemp                            // devolvemos los últimos usuarios cargados
     }
-
-    this.busquedasService.buscar( 'usuarios', termino.target.value )   // Si no esta vacia, se envíael valor del evento al busquedasService
-      .subscribe(resultados => {                                       // La respuesta sera un array de usuarios que cumplen el término de la busqueda
-        this.usuarios = resultados                                     // igualamos a la prop usuarios: Usuario [] y esto redibuja el html
-      })              
+    
+    this.busquedasService.buscar('usuarios', termino)                     // Si no esta vacia, se envíael valor del termino al busquedasService
+      .subscribe( (resp:Usuario[]) => {                                   // La resp viene como Usuario[] | hospital[] así que especificamos como de Usuario[]
+        this.usuarios = resp;                                             // igualamos la resp a la prop usuarios: Usuario [] y esto redibuja el html
+      })
+    
   } 
 
   eliminarUsuario( usuario: Usuario ){
     
-    if( usuario.uid === this.usuarioService.uid){                                // Si el usuario generado por el html (logeado) = al de la bd
-      return Swal.fire('Error', 'No puede borrarse a si mismo', 'error');        // y quiere borrarse así mismo, mensaje de error
+    if( usuario.uid === this.usuarioService.uid){                          // Si el usuario generado por el html (logeado) = al de la bd
+      return Swal.fire('Error', 'No puede borrarse a si mismo', 'error');  // y quiere borrarse así mismo, mensaje de error
     }
 
     Swal.fire({

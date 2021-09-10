@@ -14,17 +14,18 @@ export class ModalImagenService {
   public img: string ;
 
   public nuevaImagen: EventEmitter<string> = new EventEmitter<string>(); //Instancia a un observable tipo string = url de la nueva imagen
-
+                                                                         // Cada vez que se usa un método de modalImagenService y genera
+                                                                         // un string se emite un observable
   get ocultarModal(){
     return this._ocultarModal   // Getter de ocultarModal
   }
 
   abrirModal(                                               // Esta función muestra el modal y recupera la imagen del backend
     tipo: 'usuarios'|'medicos'|'hospitales',                // Desde usuarios.components se le envían los arg necesarios
+    img: string = "x",  
     id: string,
-    img: string = "x"  
   ){
-    this._ocultarModal = false; 
+    this._ocultarModal = false;                             // Muestra el modal
     this.tipo = tipo; 
     this.id = id;
     
