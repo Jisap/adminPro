@@ -51,6 +51,15 @@ export class UsuarioService {
       }
    }
 
+   get role(): 'ADMIN_ROLE' | 'USER_ROLE' {
+     return this.usuario.role
+   }
+
+   guardarLocalStorage( token:string, menu:any ){
+     localStorage.setItem('token', token);                  
+     localStorage.setItem('menu', JSON.stringify(menu));
+   }
+
   googleInit(){
 
     return new Promise( ( resolve:any ) => { 
@@ -71,6 +80,7 @@ export class UsuarioService {
 
   logout(){
     localStorage.removeItem('token');        // Borramos el token de localStorage
+    localStorage.removeItem('menu');         // Borramos el menú al que tenia acceso
     
     this.auth2.signOut()                     // Nos deslogueamos de google usando el auth2 del usuario -> promesa
         .then( () => {                       // Si fue bien 
@@ -89,7 +99,7 @@ export class UsuarioService {
       headers: {
         'x-token': this.token
       }
-    }).pipe(                                                       // Obtenemos una respuesta del backend que es el nuevo token y el usuario
+    }).pipe(                                                       // Obtenemos una respuesta del backend que es el nuevo token y el usuario y el menu que puede ver
       map((resp: any) => {                                         // Al Obtener esta respuesta la modificamos con map. 
         
         const { email, google,
@@ -102,7 +112,8 @@ export class UsuarioService {
           role, uid
         ) 
 
-        localStorage.setItem('token', resp.token)                  // y 2º guardararemos el token en localStorage
+        this.guardarLocalStorage( resp.token, resp.menu);          // y 2º guardararemos el token en localStorage
+                                                                   // con su correspondiente menu
         return true;                                               // y el resultado final es un true si es que hubo respuesta
       }),
                                               
@@ -112,10 +123,11 @@ export class UsuarioService {
 
   crearUsuario ( formData: RegisterForm){
     
-    return this.http.post(`${base_url}/usuarios`, formData)   // Petición al backend en 'http://localhost:3005/api/usuarios' que devuelve un observable
-            .pipe(                                            // Transformamos los datos mediante pipe
-              tap((resp: any) => {                            // La transformación solo será un efecto secundario 
-                localStorage.setItem('token', resp.token)     // que será guardar el token en localStorage
+    return this.http.post(`${base_url}/usuarios`, formData)        // Petición al backend en 'http://localhost:3005/api/usuarios' que devuelve un observable
+            .pipe(                                                 // Transformamos los datos mediante pipe
+              tap((resp: any) => {                                 // La transformación solo será un efecto secundario 
+                this.guardarLocalStorage(resp.token, resp.menu);   // que será guardar el token en localStorage
+                                                                   // y su correspondiente menu que es parte de la respuesta
               })
             )
   }
@@ -136,10 +148,11 @@ export class UsuarioService {
 
   login( formData: LoginForm ){
     
-    return this.http.post(`${base_url}/login`, formData)      // Petición al backend en 'http://localhost:3005/api/login' que devuelve un observable
-            .pipe(                                            // Transformamos los datos mediante pipe
-                tap( (resp: any) => {                         // La transformación solo será un efecto secundario                
-                  localStorage.setItem('token', resp.token)   // que será guardar el token en localStorage
+    return this.http.post(`${base_url}/login`, formData)             // Petición al backend en 'http://localhost:3005/api/login' que devuelve un observable
+            .pipe(                                                   // Transformamos los datos mediante pipe
+                tap( (resp: any) => {                                // La transformación solo será un efecto secundario                
+                  this.guardarLocalStorage(resp.token, resp.menu);   // que será guardar el token en localStorage
+                                                                     // y su correspondiente menu que es parte de la respuesta
                 })
               )
   }
@@ -149,7 +162,8 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login/google`, { token }) // Petición al backend en 'http://localhost:3005/api/login/google' que devuelve un observable
       .pipe(                                                     // Transformamos los datos mediante pipe
         tap((resp: any) => {                                     // La transformación solo será un efecto secundario                
-          localStorage.setItem('token', resp.token)              // que será guardar el token en localStorage
+          this.guardarLocalStorage(resp.token, resp.menu);       // que será guardar el token en localStorage
+                                                                 // y su correspondiente menu que es parte de la respuesta
         })
       )
   }

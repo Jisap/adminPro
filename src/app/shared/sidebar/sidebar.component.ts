@@ -14,10 +14,10 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
   public usuario:Usuario; // Declaramos un usuario según el modelo Usuario
 
-  constructor(private sidebarService: SidebarService,     // Inyectamos el servicio del menu del sideBar
+  constructor( public sidebarService: SidebarService,     // Inyectamos el servicio del menu del sideBar
                private usuarioService: UsuarioService) {  // Inyectamos el usuarioService para las fotos del usuario logueado
               
-    this.menuItems = sidebarService.menu;
+    //this.menuItems = sidebarService.menu;
     
     this.usuario = usuarioService.usuario; // Igualamos el usuario con la respuesta de usuarioService -> instancia del usuario logueado
   }

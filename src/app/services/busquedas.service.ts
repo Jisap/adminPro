@@ -48,6 +48,11 @@ export class BusquedasService {
     return resultados
   }
 
+  busquedaGlobal( termino: string){
+    const url = `${base_url}/todo/${termino}`                 // http://localhost:3005/api/todo/tipo
+    return this.http.get(url, this.headers);
+  }
+
   buscar(                                                     // petición de busqueda al backend
     tipo: 'usuarios' | 'medicos' | 'hospitales',              // recibe el tipo y el término de la busqueda
     termino: string = ''                                      
