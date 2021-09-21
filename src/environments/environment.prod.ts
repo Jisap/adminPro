@@ -3,5 +3,5 @@
 
 export const environment = {
   production: true,
-  base_url: 'http://localhost:3005/api'
+  base_url: 'https://backend-adminpro-angular.herokuapp.com/api'
 };
